@@ -1198,12 +1198,12 @@
 
 		// Create a hash for this combination of background settings.
 		// This is used to determine when two slide backgrounds are
-		// the same.
+	        // the same.	    
 		if( data.background || data.backgroundColor || data.backgroundImage || data.backgroundVideo || data.backgroundIframe ) {
 			element.setAttribute( 'data-background-hash', data.background +
 															data.backgroundSize +
-															data.backgroundImage +
-															data.backgroundVideo +
+					      (data.backgroundImage ? data.backgroundImage.slice(50) + data.backgroundImage.slice(-50):null) +
+					      (data.backgroundVideo ? data.backgroundVideo.slice(50) + data.backgroundVideo.slice(-50):null) + 
 															data.backgroundIframe +
 															data.backgroundColor +
 															data.backgroundRepeat +
@@ -3814,10 +3814,14 @@
 						video.setAttribute( 'playsinline', '' );
 					}
 
-					// Support comma separated lists of video sources
-					backgroundVideo.split( ',' ).forEach( function( source ) {
+				        // Support comma separated lists of video sources
+				        if(!backgroundVideo.startsWith("data:")) {
+					  backgroundVideo.split( ',' ).forEach( function( source ) {
 						video.innerHTML += '<source src="'+ source +'">';
-					} );
+					  } );
+					} else {
+						video.innerHTML += '<source src="'+ backgroundVideo +'">';					    
+					}
 
 					backgroundContent.appendChild( video );
 				}
